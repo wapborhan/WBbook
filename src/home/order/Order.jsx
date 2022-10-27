@@ -8,6 +8,7 @@ const Order = () => {
         <li>my Order 3</li>
         <li>my Order 4</li>
         <li>my Order 5</li>
+        <li>my Order 6</li>
       </ul>
     </div>
   );
