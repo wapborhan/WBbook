@@ -1,7 +1,7 @@
 const Order = () => {
   return (
     <div>
-      <h1>Order</h1>
+      <h1>Order List</h1>
       <ul>
         <li>my Order 1</li>
         <li>my Order 2</li>
