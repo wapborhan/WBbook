@@ -4,12 +4,14 @@ import {
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import auth from "../../firebase/firebaseInt";
+import { AuthContex } from "../../provider/AuthProvider";
 
 const SignUp = () => {
   const [massage, setMassege] = useState([]);
 
+  const { createUser } = useContext(AuthContex);
   // const auth = getAuth(app);
 
   const handleRegister = (e) => {
@@ -17,8 +19,14 @@ const SignUp = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     const accepter = e.target.terms.checked;
-
-    console.log(accepter);
+    createUser(email, password)
+      .then((result) => {
+        console.log(result.user);
+        e.target.reset();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
     if (password.length < 6) {
       setMassege([
@@ -38,54 +46,54 @@ const SignUp = () => {
       return;
     }
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed up
-        const user = userCredential.user;
-        console.log(user);
+    //   createUserWithEmailAndPassword(auth, email, password)
+    //     .then((userCredential) => {
+    //       // Signed up
+    //       const user = userCredential.user;
+    //       console.log(user);
 
-        updateProfile(user, {
-          displayName: "Jane Q. User",
-          photoURL: "https://example.com/jane-q-user/profile.jpg",
-        })
-          .then(() => {
-            // Profile updated!
-            console.log("Updated profile");
-            // ...
-          })
-          .catch((error) => {
-            console.log(error);
-            // An error occurred
-            // ...
-          });
+    //       updateProfile(user, {
+    //         displayName: "Borhan Uddin",
+    //         photoURL:
+    //           "https://www.wapborhan.com/_next/image?url=%2Fimages%2Fbanner.jpg&w=256&q=75",
+    //       })
+    //         .then(() => {
+    //           // Profile updated!
+    //           console.log("Updated profile");
+    //           // ...
+    //         })
+    //         .catch((error) => {
+    //           console.log(error);
+    //           // An error occurred
+    //           // ...
+    //         });
 
-        sendEmailVerification(user).then(() => {
-          // Email verification sent!
-          alert("Verification sent");
-          // ...
-        });
-        setMassege([
-          {
-            message: "Sign up Complete",
-            color: "green",
-          },
-        ]);
-        // ...
-      })
-      .catch((error) => {
-        // const errorCode = error.code;
-        const errorMessage = error.message;
+    //       sendEmailVerification(user).then(() => {
+    //         // Email verification sent!
+    //         alert("Verification sent");
+    //         // ...
+    //       });
+    //       setMassege([
+    //         {
+    //           message: "Sign up Complete",
+    //           color: "green",
+    //         },
+    //       ]);
+    //       // ...
+    //     })
+    //     .catch((error) => {
+    //       // const errorCode = error.code;
+    //       const errorMessage = error.message;
 
-        setMassege([
-          {
-            message: errorMessage,
-            color: "red",
-          },
-        ]);
-        // ..
-      });
+    //       setMassege([
+    //         {
+    //           message: errorMessage,
+    //           color: "red",
+    //         },
+    //       ]);
+    //       // ..
+    //     });
   };
-
   return (
     <div>
       <div className="signup-1 flex items-center relative h-screen outline-0">

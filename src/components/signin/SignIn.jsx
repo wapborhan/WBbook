@@ -1,38 +1,42 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import auth from "../../firebase/firebaseInt";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContex } from "../../provider/AuthProvider";
 
 const SignIn = () => {
   const [user, setUser] = useState(null);
+
+  const { signinUser, signinWithGoogle } = useContext(AuthContex);
+  const navigate = useNavigate();
 
   const handleRegister = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed up
-        const user = userCredential.user;
-
-        if (user.emailVerified) {
-          setUser(user);
-          alert("Email verified");
-        } else {
-          alert("Email not verified");
-        }
-
-        // ...
+    signinUser(email, password)
+      .then((result) => {
+        console.log(result.user);
+        e.target.reset();
+        navigate("/");
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
-        console.log(errorCode, errorMessage);
-        // ..
+        console.error(error);
       });
   };
+
+  const handeGoogleSignIn = () => {
+    signinWithGoogle()
+      .then((result) => {
+        // console.log(result.user);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <div className="signup-1 flex items-center relative h-screen">
       <div className="overlay absolute inset-0 z-0 bg-black opacity-75"></div>
@@ -65,7 +69,7 @@ const SignIn = () => {
                     <input
                       type="email"
                       placeholder="E-mail"
-                      value="borhanuddin979@gmail.com"
+                      defaultValue="borhanuddin979@gmail.com"
                       name="email"
                       className="h-10 py-1 pr-3 w-full"
                     />
@@ -100,7 +104,7 @@ const SignIn = () => {
                       type="password"
                       name="password"
                       placeholder="Password"
-                      value="123456"
+                      defaultValue="123456"
                       className="h-10 py-1 pr-3 w-full"
                     />
                   </div>
@@ -113,7 +117,14 @@ const SignIn = () => {
                 </div>
               </div>
             </form>
-
+            <div className="text-center mt-2 md:mt-3">
+              <button
+                onClick={handeGoogleSignIn}
+                className="bg-blue-600 hover:bg-green-700 text-white text-xl py-2 px-4 md:px-6 rounded transition-colors duration-300"
+              >
+                Sign In on Google
+              </button>
+            </div>
             <div className="border-t border-solid mt-6 md:mt-12 pt-4">
               <p className="text-gray-500 text-center">
                 Have not an account,{" "}

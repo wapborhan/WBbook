@@ -1,17 +1,28 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContex } from "../../provider/AuthProvider";
 
 const Header = () => {
+  const { user, logOut } = useContext(AuthContex);
+
+  const handleLogout = () => {
+    logOut()
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   const links = (
     <>
       <li>
         <NavLink to="/">Home</NavLink>
       </li>
-      <li>
-        <NavLink to="/register">Register</NavLink>
-      </li>
-      <li>
-        <NavLink to="/login">Login</NavLink>
-      </li>
+      {user && (
+        <>
+          <li>
+            <NavLink to="/order">Order</NavLink>
+          </li>
+        </>
+      )}
     </>
   );
   return (
@@ -42,18 +53,39 @@ const Header = () => {
               {links}
             </ul>
           </div>
-          <a className="btn btn-ghost normal-case text-xl">Firebase Auth</a>
+          <a className="btn btn-ghost normal-case text-xl">WB Book</a>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
         <div className="navbar-end">
-          <div className="flex">
-            <img
-              src="https://worldywcacouncil.org/wp-content/uploads/2014/10/speaker-2-v2.jpg"
-              alt=""
-              className="w-16 rounded-full border-2"
-            />
+          <div className="flex gap-5 items-center">
+            {user ? (
+              <>
+                <NavLink to="/profile">
+                  <img
+                    src={
+                      user?.photoURL ||
+                      "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                    }
+                    alt={user?.displayName || ""}
+                    className="w-16 rounded-full border-2"
+                  />
+                </NavLink>
+                <button onClick={handleLogout}>Logout</button>
+              </>
+            ) : (
+              <>
+                <ul tabIndex={0} className="menu menu-horizontal px-1">
+                  <li>
+                    <NavLink to="/register">Register</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/login">Login</NavLink>
+                  </li>
+                </ul>
+              </>
+            )}
           </div>
         </div>
       </div>
