@@ -6,7 +6,6 @@ const SignUp = () => {
   const [massage, setMassege] = useState([]);
 
   const { createUser } = useContext(AuthContex);
-  // const auth = getAuth(app);
 
   const handleRegister = (e) => {
     e.preventDefault();
