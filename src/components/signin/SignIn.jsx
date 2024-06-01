@@ -1,6 +1,4 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import auth from "../../firebase/firebaseInt";
 import { useContext, useState } from "react";
 import { AuthContex } from "../../provider/AuthProvider";
 
