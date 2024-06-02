@@ -1,11 +1,5 @@
 import { NavLink } from "react-router-dom";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  updateProfile,
-} from "firebase/auth";
 import { useContext, useState } from "react";
-import auth from "../../firebase/firebaseInt";
 import { AuthContex } from "../../provider/AuthProvider";
 
 const SignUp = () => {
